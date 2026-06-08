@@ -1,49 +1,29 @@
-[package]
+# CAPABILITY.toml — si-fleet-api
+# Express REST API for the SuperInstance fleet
+
 name = "si-fleet-api"
 version = "1.0.0"
-layer = "api"
-description = "Express REST API for the SuperInstance fleet — repo registry, capability resolution, budget management, conservation verification, and event logging backed by Supabase"
+description = "REST API: fleet budgets, conservation audits, budget transfers, repo/capability queries, event logging, ecosystem health"
 
-[provides]
-capabilities = [
-  { name = "repo-registry", type = "endpoint", description = "CRUD endpoints for fleet repos: list, search, filter by language, get by name" },
-  { name = "capability-resolution", type = "endpoint", description = "Resolve needed capabilities to repos that provide them all" },
-  { name = "fleet-budgets", type = "endpoint", description = "List enriched fleet budgets with conservation verification status" },
-  { name = "budget-transfer", type = "endpoint", description = "Atomic budget transfer between agents preserving gamma + eta ≈ total" },
-  { name = "fleet-audit", type = "endpoint", description = "Run conservation audit across all fleet budgets and report violations" },
-  { name = "event-logging", type = "endpoint", description = "Insert and retrieve fleet events: spawn, complete, error, budget, audit" },
-  { name = "fleet-health", type = "endpoint", description = "Comprehensive fleet health: repo count, capabilities, agents, events, conservation status" },
-  { name = "ecosystem-stats", type = "endpoint", description = "Aggregated stats: repos by language, total tests, total capabilities" },
-  { name = "conservation-verification", type = "module", description = "Verify gamma + eta ≈ total_budget with configurable epsilon tolerance" },
-  { name = "supabase-client", type = "module", description = "Singleton Supabase JS client with auth and connection pooling" },
+provides = [
+    "health-endpoint",
+    "repo-listing",
+    "repo-search",
+    "repo-detail",
+    "capability-listing",
+    "capability-resolution",
+    "fleet-budget-query",
+    "budget-transfer",
+    "fleet-audit",
+    "fleet-event-logging",
+    "fleet-health-summary",
+    "ecosystem-stats",
+    "supabase-rest-client",
+    "conservation-verification",
 ]
 
-exports = [
-  "startServer",
-  "app",
-  "GET /api/health",
-  "GET /api/repos",
-  "GET /api/repos/search",
-  "GET /api/repos/:name",
-  "GET /api/capabilities",
-  "GET /api/capabilities/resolve",
-  "GET /api/fleet/budgets",
-  "POST /api/fleet/transfer",
-  "GET /api/fleet/audit",
-  "POST /api/fleet/events",
-  "GET /api/fleet/health",
-  "GET /api/stats",
-  "conservation::verifyBudget",
-  "conservation::transferBudget",
-  "conservation::auditFleet",
-  "conservation::BudgetRow",
-  "supabase::getClient",
-  "supabase::createClient",
-]
-
-[requires]
-optional = [
-  { crate = "supabase", reason = "All endpoints read from and write to Supabase PostgreSQL tables" },
-  { crate = "conservation-law-rs", reason = "Conservation verification checks gamma + eta = total_budget invariant" },
-  { crate = "si-cli", reason = "CLI syncs repos and capabilities to Supabase tables consumed by this API" },
+requires = [
+    "supabase-instance",
+    "fleet-budget-data",
+    "fleet-events-table",
 ]
