@@ -1,0 +1,17 @@
+name = "si-fleet-api"
+main = "src/index.ts"
+compatibility_date = "2026-06-01"
+
+[vars]
+FLEET_VERSION = "0.1.0"
+ORG = "SuperInstance"
+
+# Fleet crate registry cached in KV
+# [[kv_namespaces]]
+# binding = "CRATES"
+# id = "your-kv-namespace-id"
+
+# Routes
+# [[routes]]
+# pattern = "fleet.superinstance.ai/*"
+# zone_name = "superinstance.ai"
